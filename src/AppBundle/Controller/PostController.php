@@ -42,4 +42,19 @@ class PostController extends Controller {
         return new Response('Article crée', Response::HTTP_CREATED);
     }
 
+    /**
+     * Renvoi tous les articles
+     *
+     * @Route("/articles", name="article_list")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function listAction() {
+        $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
+        $data = $this->get('jms_serializer')->serialize($posts, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'applicaton/json');
+        return $response;
+    }
+
 }
