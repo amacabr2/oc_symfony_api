@@ -15,13 +15,11 @@ class PostController extends Controller {
      * Renvoi un article par rapport à son identifiant
      *
      * @Route("/articles/{id}", name="articles_show")
+     * @param Post $post
+     * @return Response
      */
-    public function showAction() {
-        $article = new Post();
-        $article
-            ->setTitle('Mon premier article')
-            ->setContent('Le contenu de mon premier article');
-        $data = $this->get('jms_serializer')->serialize($article, 'json');
+    public function showAction(Post $post) {
+        $data = $this->get('jms_serializer')->serialize($post, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
