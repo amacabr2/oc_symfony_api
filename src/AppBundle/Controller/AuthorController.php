@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Post;
+use AppBundle\Entity\Author;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,49 +10,49 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PostController extends Controller {
+class AuthorController extends Controller {
 
     /**
-     * Renvoi un article
+     * Renvoi un auteur
      *
-     * @Route("/articles/{id}", name="articles_show")
-     * @param Post $post
+     * @Route("/authors/{id}", name="author_show")
+     * @param Author $author
      * @return Response
      */
-    public function showAction(Post $post) {
-        $data = $this->get('jms_serializer')->serialize($post, 'json', SerializationContext::create()->setGroups(['detail']));
+    public function showAction(Author $author) {
+        $data = $this->get('jms_serializer')->serialize($author, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
 
     /**
-     * Reçoit les données d'un article pour le crée
+     * Reçoit les données d'un auteur pour le crée
      *
-     * @param Request $request
-     * @Route("/articles", name="article_create")
+     * @Route("/authors", name="author_create")
      * @Method({"POST"})
+     * @param Request $request
      * @return Response
      */
     public function createAction(Request $request) {
         $data = $request->getContent();
-        $post = $this->get('jms_serializer')->deserialize($data, 'AppBundle\Entity\Post', 'json');
+        $author = $this->get('jms_serializer')->deserialize($data, 'AppBundle\Entity\Author', 'json');
         $em = $this->getDoctrine()->getManager();
-        $em->persist($post);
+        $em->persist($author);
         $em->flush();
-        return new Response('Article crée', Response::HTTP_CREATED);
+        return new Response('Auteur crée', Response::HTTP_CREATED);
     }
 
     /**
-     * Renvoi tous les articles
+     * Renvoi tous les auteurs
      *
-     * @Route("/articles", name="article_list")
+     * @Route("/authors", name="author_list")
      * @Method({"GET"})
      * @return Response
      */
     public function listAction() {
-        $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
-        $data = $this->get('jms_serializer')->serialize($posts, 'json', SerializationContext::create()->setGroups(['list']));
+        $posts = $this->getDoctrine()->getRepository('AppBundle:Author')->findAll();
+        $data = $this->get('jms_serializer')->serialize($posts, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
