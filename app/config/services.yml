@@ -33,3 +33,9 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    serializer_listener.post:
+        class: AppBundle\Serializer\Listener\PostListener
+        public: true
+        tags:
+            - { name: jms_serializer.event_subscriber }
