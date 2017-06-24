@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
+use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -19,7 +20,7 @@ class PostController extends Controller {
      * @return Response
      */
     public function showAction(Post $post) {
-        $data = $this->get('jms_serializer')->serialize($post, 'json');
+        $data = $this->get('jms_serializer')->serialize($post, 'json', SerializationContext::create()->setGroups(['detail']));
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -51,9 +52,9 @@ class PostController extends Controller {
      */
     public function listAction() {
         $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
-        $data = $this->get('jms_serializer')->serialize($posts, 'json');
+        $data = $this->get('jms_serializer')->serialize($posts, 'json', SerializationContext::create()->setGroups(['list']));
         $response = new Response($data);
-        $response->headers->set('Content-Type', 'applicaton/json');
+        $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
 
