@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * Post
  *
- * @ORM\Table(name="post")
+ * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
  */
 class Post {
@@ -42,6 +42,12 @@ class Post {
      */
     private $content;
 
+    /**
+     * @var Author
+     *
+     * @ORM\ManyToOne(targetEntity="Author", cascade={"all"}, fetch="EAGER")
+     */
+    private $author;
 
     /**
      * Get id
@@ -99,6 +105,22 @@ class Post {
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return Author
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param Author $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
     }
 }
 
