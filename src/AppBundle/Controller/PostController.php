@@ -54,16 +54,12 @@ class PostController extends FOSRestController {
     /**
      * Renvoi tous les articles
      *
-     * @Route("/articles", name="post_list")
-     * @Method({"GET"})
-     * @return Response
+     * @Rest\Get("/articles, name="post_list")
+     * @return array
      */
     public function listAction() {
         $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
-        $data = $this->get('jms_serializer')->serialize($posts, 'json', SerializationContext::create()->setGroups(['list']));
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $posts;
     }
 
 }

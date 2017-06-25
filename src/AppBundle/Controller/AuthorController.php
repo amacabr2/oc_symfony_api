@@ -51,16 +51,11 @@ class AuthorController extends FOSRestController {
     /**
      * Renvoi tous les auteurs
      *
-     * @Route("/auteurs", name="author_list")
-     * @Method({"GET"})
-     * @return Response
+     * @Rest\Get("/auteurs", name="post_list")
      */
     public function listAction() {
         $posts = $this->getDoctrine()->getRepository('AppBundle:Author')->findAll();
-        $data = $this->get('jms_serializer')->serialize($posts, 'json');
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $posts;
     }
 
 }
