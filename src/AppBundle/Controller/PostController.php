@@ -3,23 +3,25 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
+use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\View;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class PostController extends Controller {
+class PostController extends FOSRestController {
 
     /**
      * Renvoi un article
      *
-     * @Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
+     * @Rest\Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
      * @param Post $post
-     * @View
+     * @Rest\View
      * @return Post
      */
     public function showAction(Post $post) {
@@ -32,18 +34,21 @@ class PostController extends Controller {
     /**
      * Reçoit les données d'un article pour le crée
      *
-     * @param Request $request
-     * @Route("/articles", name="article_create")
-     * @Method({"POST"})
+     * @Rest\Post(path="/articles", name="post_create")
+     * @Rest\View(StatusCode=201)
+     * @ParamConverter("post", converter="fos_rest.request_body")
+     * @param Post $post
      * @return Response
      */
-    public function createAction(Request $request) {
-        $data = $request->getContent();
-        $post = $this->get('jms_serializer')->deserialize($data, 'AppBundle\Entity\Post', 'json');
+    public function createAction(Post $post) {
         $em = $this->getDoctrine()->getManager();
         $em->persist($post);
         $em->flush();
-        return new Response('Article crée', Response::HTTP_CREATED);
+        return $this->view(
+            $post,
+            Response::HTTP_CREATED,
+            ['Location' => $this->generateUrl('post_show', ['id' => $post->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]
+        );
     }
 
     /**

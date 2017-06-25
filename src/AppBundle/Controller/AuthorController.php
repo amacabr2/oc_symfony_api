@@ -3,23 +3,25 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Author;
+use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\View;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class AuthorController extends Controller {
+class AuthorController extends FOSRestController {
 
     /**
      * Renvoi un auteur
      *
-     * @Get(path="/auteurs/{id}", name="author_show", requirements={"id"="\d+"})
+     * @Rest\Get(path="/auteurs/{id}", name="author_show", requirements={"id"="\d+"})
      * @param Author $author
-     * @View
+     * @Rest\View
      * @return Author
      */
     public function showAction(Author $author) {
@@ -29,18 +31,21 @@ class AuthorController extends Controller {
     /**
      * Reçoit les données d'un auteur pour le crée
      *
-     * @Route("/authors", name="author_create")
-     * @Method({"POST"})
-     * @param Request $request
+     * @Rest\Post(path="/auteurs", name="author_create")
+     * @Rest\View(StatusCode=201)
+     * @ParamConverter("author", converter="fos_rest.request_body")
+     * @param Author $author
      * @return Response
      */
-    public function createAction(Request $request) {
-        $data = $request->getContent();
-        $author = $this->get('jms_serializer')->deserialize($data, 'AppBundle\Entity\Author', 'json');
+    public function createAction(Author $author) {
         $em = $this->getDoctrine()->getManager();
         $em->persist($author);
         $em->flush();
-        return new Response('Auteur crée', Response::HTTP_CREATED);
+        return $this->view(
+            $author,
+            Response::HTTP_CREATED,
+            ['Location' => $this->generateUrl('author_show', ['id' => $author->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]
+        );
     }
 
     /**
