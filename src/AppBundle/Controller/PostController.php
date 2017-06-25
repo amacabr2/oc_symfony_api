@@ -7,6 +7,8 @@ use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,15 +17,16 @@ class PostController extends Controller {
     /**
      * Renvoi un article
      *
-     * @Route("/articles/{id}", name="articles_show")
+     * @Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
      * @param Post $post
-     * @return Response
+     * @View
+     * @return Post
      */
     public function showAction(Post $post) {
-        $data = $this->get('jms_serializer')->serialize($post, 'json', SerializationContext::create()->setGroups(['detail']));
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+//        $data = $this->get('jms_serializer')->serialize($post, 'json', SerializationContext::create()->setGroups(['detail']));
+//        $response = new Response($data);
+//        $response->headers->set('Content-Type', 'application/json');
+        return $post;
     }
 
     /**
@@ -46,7 +49,7 @@ class PostController extends Controller {
     /**
      * Renvoi tous les articles
      *
-     * @Route("/articles", name="article_list")
+     * @Route("/articles", name="post_list")
      * @Method({"GET"})
      * @return Response
      */

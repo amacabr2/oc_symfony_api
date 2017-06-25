@@ -7,6 +7,8 @@ use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,15 +17,13 @@ class AuthorController extends Controller {
     /**
      * Renvoi un auteur
      *
-     * @Route("/authors/{id}", name="author_show")
+     * @Get(path="/auteurs/{id}", name="author_show", requirements={"id"="\d+"})
      * @param Author $author
-     * @return Response
+     * @View
+     * @return Author
      */
     public function showAction(Author $author) {
-        $data = $this->get('jms_serializer')->serialize($author, 'json');
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $author;
     }
 
     /**
@@ -46,7 +46,7 @@ class AuthorController extends Controller {
     /**
      * Renvoi tous les auteurs
      *
-     * @Route("/authors", name="author_list")
+     * @Route("/auteurs", name="author_list")
      * @Method({"GET"})
      * @return Response
      */
