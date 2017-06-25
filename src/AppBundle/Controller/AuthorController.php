@@ -21,7 +21,7 @@ class AuthorController extends FOSRestController {
      *
      * @Rest\Get(path="/auteurs/{id}", name="author_show", requirements={"id"="\d+"})
      * @param Author $author
-     * @Rest\View
+     * @Rest\View)
      * @return Author
      */
     public function showAction(Author $author) {

@@ -21,7 +21,7 @@ class PostController extends FOSRestController {
      *
      * @Rest\Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
      * @param Post $post
-     * @Rest\View
+     * @Rest\View)
      * @return Post
      */
     public function showAction(Post $post) {

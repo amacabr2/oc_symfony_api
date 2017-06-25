@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Author
@@ -19,6 +20,8 @@ class Author
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Groups({"list"})
      */
     private $id;
 
@@ -26,6 +29,8 @@ class Author
      * @var string
      *
      * @ORM\Column(name="fullname", type="string", length=100)
+     *
+     * @Serializer\Groups({"list", "detail"})
      */
     private $fullname;
 
@@ -33,6 +38,8 @@ class Author
      * @var string
      *
      * @ORM\Column(name="biography", type="text", nullable=true)
+     *
+     * @Serializer\Groups({"detail"})
      */
     private $biography;
 
@@ -40,6 +47,8 @@ class Author
      * @var Post
      *
      * @ORM\OneToMany(targetEntity="Post", mappedBy="author", cascade={"persist"})
+     *
+     * @Serializer\Groups({"detail"})
      */
     private $posts;
 
