@@ -10,6 +10,8 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Post {
 
@@ -20,7 +22,7 @@ class Post {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"list"})
+     * @Serializer\Expose
      */
     private $id;
 
@@ -29,7 +31,7 @@ class Post {
      *
      * @ORM\Column(name="title", type="string", length=100)
      *
-     * @Serializer\Groups({"detail","list"})
+     * @Serializer\Expose
      */
     private $title;
 
@@ -38,7 +40,7 @@ class Post {
      *
      * @ORM\Column(name="content", type="text")
      *
-     * @Serializer\Groups({"detail","list"})
+     * @Serializer\Expose
      */
     private $content;
 

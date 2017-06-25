@@ -31,7 +31,7 @@ class AuthorController extends FOSRestController {
     /**
      * Reçoit les données d'un auteur pour le crée
      *
-     * @Rest\Post(path="/auteurs", name="author_create")
+     * @Rest\Post("/auteurs", name="author_create")
      * @Rest\View(StatusCode=201)
      * @ParamConverter("author", converter="fos_rest.request_body")
      * @param Author $author
@@ -51,7 +51,8 @@ class AuthorController extends FOSRestController {
     /**
      * Renvoi tous les auteurs
      *
-     * @Rest\Get("/auteurs", name="post_list")
+     * @Rest\Get("/auteurs", name="author_list")
+     * @Rest\View
      */
     public function listAction() {
         $posts = $this->getDoctrine()->getRepository('AppBundle:Author')->findAll();

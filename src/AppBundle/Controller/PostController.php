@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
+use AppBundle\Representation\Posts;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,9 +21,9 @@ class PostController extends FOSRestController {
     /**
      * Renvoi un article
      *
-     * @Rest\Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
+     * @Rest\Get("/articles/{id}", name="post_show", requirements={"id"="\d+"})
      * @param Post $post
-     * @Rest\View)
+     * @Rest\View
      * @return Post
      */
     public function showAction(Post $post) {
@@ -34,7 +36,7 @@ class PostController extends FOSRestController {
     /**
      * Reçoit les données d'un article pour le crée
      *
-     * @Rest\Post(path="/articles", name="post_create")
+     * @Rest\Post("/articles", name="post_create")
      * @Rest\View(StatusCode=201)
      * @ParamConverter("post", converter="fos_rest.request_body")
      * @param Post $post
@@ -54,12 +56,21 @@ class PostController extends FOSRestController {
     /**
      * Renvoi tous les articles
      *
-     * @Rest\Get("/articles, name="post_list")
-     * @return array
+     * @Rest\Get("/articles", name="post_list")
+     * @Rest\QueryParam(name="keyword", requirements="[a-zA-Z0-9]", nullable=true, description="The keyword to search for")
+     * @Rest\QueryParam(name="order", requirements="asc|desc", default="asc", description="Sort order (asc or desc)")
+     * @Rest\QueryParam(name="limit", requirements="\d+", default="15", description="Max number of movies page")
+     * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="The paginate offset")
+     * @Rest\View()
      */
-    public function listAction() {
-        $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
-        return $posts;
+    public function listAction(ParamFetcherInterface $paramFetcher) {
+        $pager = $this->getDoctrine()->getRepository('AppBundle:Post')->search(
+            $paramFetcher->get('keyword'),
+            $paramFetcher->get('order'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('offset')
+        );
+        return new Posts($pager);
     }
 
 }
