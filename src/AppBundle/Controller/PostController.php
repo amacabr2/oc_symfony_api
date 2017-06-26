@@ -22,7 +22,7 @@ class PostController extends FOSRestController {
     /**
      * Renvoi un article
      *
-     * @Rest\Get("/articles/{id}", name="post_show", requirements={"id"="\d+"})
+     * @Rest\Get(path="/articles/{id}", name="post_show", requirements={"id"="\d+"})
      * @param Post $post
      * @Rest\View
      * @return Post
@@ -37,7 +37,7 @@ class PostController extends FOSRestController {
     /**
      * Reçoit les données d'un article pour le crée
      *
-     * @Rest\Post("/articles", name="post_create")
+     * @Rest\Post(path="/articles", name="post_create")
      * @Rest\View(StatusCode=201)
      * @ParamConverter("post", converter="fos_rest.request_body")
      * @param Post $post
@@ -61,7 +61,7 @@ class PostController extends FOSRestController {
     /**
      * Renvoi tous les articles
      *
-     * @Rest\Get("/articles", name="post_list")
+     * @Rest\Get(path="/articles", name="post_list")
      * @Rest\QueryParam(name="keyword", requirements="[a-zA-Z0-9]", nullable=true, description="The keyword to search for")
      * @Rest\QueryParam(name="order", requirements="asc|desc", default="asc", description="Sort order (asc or desc)")
      * @Rest\QueryParam(name="limit", requirements="\d+", default="15", description="Max number of movies page")
