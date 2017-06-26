@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amacabr2
- * Date: 26/06/17
- * Time: 11:19
- */
 
 namespace AppBundle\EventSubscriber;
 
-
-use AppBundle\Normalizer\NormalzerInterface;
-use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use AppBundle\Normalizer\NormalizerInterface;
 use JMS\Serializer\Serializer;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -35,7 +28,7 @@ class ExceptionListener implements EventSubscriberInterface {
 
     public static function getSubscribedEvents() {
         return [
-          KernelEvents::EXCEPTION =>[['processExeception', 255]]
+          KernelEvents::EXCEPTION =>['processException', 255]
         ];
     }
 
@@ -67,9 +60,9 @@ class ExceptionListener implements EventSubscriberInterface {
     }
 
     /**
-     * @param NormalzerInterface $normalizer
+     * @param NormalizerInterface $normalizer
      */
-    public function addNormalizer(NormalzerInterface $normalizer) {
+    public function addNormalizer(NormalizerInterface $normalizer) {
         $this->normalizers[] = $normalizer;
     }
 

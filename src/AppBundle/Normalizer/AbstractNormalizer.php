@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amacabr2
- * Date: 26/06/17
- * Time: 11:06
- */
 
 namespace AppBundle\Normalizer;
 
 
-abstract class AbstractNormalizer implements NormalzerInterface {
+abstract class AbstractNormalizer implements NormalizerInterface {
 
     /**
      * @var array

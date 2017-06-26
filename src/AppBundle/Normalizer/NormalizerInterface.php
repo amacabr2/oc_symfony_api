@@ -3,7 +3,7 @@
 namespace AppBundle\Normalizer;
 
 
-interface NormalzerInterface {
+interface NormalizerInterface {
 
     public function normalize(\Exception $exception);
 
