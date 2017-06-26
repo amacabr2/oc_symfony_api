@@ -46,3 +46,10 @@ services:
             - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
         tags:
             - { name: app.normalizer }
+
+    app.exception_subscriber:
+        class: AppBundle\EventSubscriber\ExceptionListener
+        arguments:
+           - '@jms_serializer'
+        tags:
+           - { name: kernel.event_subscriber }
