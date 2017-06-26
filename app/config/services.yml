@@ -39,3 +39,10 @@ services:
         public: true
         tags:
             - { name: jms_serializer.event_subscriber }
+
+    app.normalizer.resource_validation_exception:
+        class: AppBundle\Normalizer\NotFoundHttpExceptionNormalizer
+        arguments:
+            - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
+        tags:
+            - { name: app.normalizer }

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
@@ -21,7 +22,6 @@ class Post {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
      * @Serializer\Expose
      */
     private $id;
@@ -30,8 +30,8 @@ class Post {
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=100)
-     *
      * @Serializer\Expose
+     * @Assert\NotBlank
      */
     private $title;
 
@@ -39,8 +39,8 @@ class Post {
      * @var string
      *
      * @ORM\Column(name="content", type="text")
-     *
      * @Serializer\Expose
+     * @Assert\NotBlank
      */
     private $content;
 
