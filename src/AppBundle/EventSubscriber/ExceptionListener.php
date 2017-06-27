@@ -24,12 +24,7 @@ class ExceptionListener implements EventSubscriberInterface {
      */
     public function __construct(Serializer $serializer) {
         $this->serializer = $serializer;
-    }
-
-    public static function getSubscribedEvents() {
-        return [
-          KernelEvents::EXCEPTION =>['processException', 255]
-        ];
+        $this->normalizers = [];
     }
 
     /**
@@ -40,7 +35,7 @@ class ExceptionListener implements EventSubscriberInterface {
         $result = null;
 
         foreach ($this->normalizers as $normalizer) {
-            if ($normalizer->supports($event)) {
+            if ($normalizer->supports($event->getException())) {
                 $result = $normalizer->normalize($event->getException());
                 break;
             }
@@ -54,6 +49,8 @@ class ExceptionListener implements EventSubscriberInterface {
             ];
         }
 
+        var_dump($result);
+
         $body = $this->serializer->serialize($result['body'], 'json');
         $event->setResponse(new Response($body, $result['code']));
 
@@ -64,6 +61,12 @@ class ExceptionListener implements EventSubscriberInterface {
      */
     public function addNormalizer(NormalizerInterface $normalizer) {
         $this->normalizers[] = $normalizer;
+    }
+
+    public static function getSubscribedEvents() {
+        return [
+            KernelEvents::EXCEPTION =>[['processException', 255]]
+        ];
     }
 
 }

@@ -67,6 +67,8 @@ class PostController extends FOSRestController {
      * @Rest\QueryParam(name="limit", requirements="\d+", default="15", description="Max number of movies page")
      * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="The paginate offset")
      * @Rest\View()
+     * @param ParamFetcherInterface $paramFetcher
+     * @return Posts
      */
     public function listAction(ParamFetcherInterface $paramFetcher) {
         $pager = $this->getDoctrine()->getRepository('AppBundle:Post')->search(
@@ -76,6 +78,19 @@ class PostController extends FOSRestController {
             $paramFetcher->get('offset')
         );
         return new Posts($pager);
+    }
+
+    /**
+     * Supprime un article
+     *
+     * @Rest\Delete(path="/articles/{id}", name="post_remove")
+     * @Rest\View(StatusCode=204)
+     * @param Post $post
+     */
+    public function removeAction(Post $post) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
     }
 
 }
