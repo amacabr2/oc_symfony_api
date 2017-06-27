@@ -83,13 +83,35 @@ class PostController extends FOSRestController {
     /**
      * Supprime un article
      *
-     * @Rest\Delete(path="/articles/{id}", name="post_remove")
+     * @Rest\Delete(path="/articles/{id}", name="post_remove", requirements={"id"="\d+"})
      * @Rest\View(StatusCode=204)
      * @param Post $post
      */
     public function removeAction(Post $post) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);
+        $em->flush();
+    }
+
+    /**
+     * Modifie un article
+     *
+     * @Rest\Put(path="articles/{id}", name="post_update", requirements={"id"="\d+"})
+     * @Rest\View(StatusCode=200)
+     * @param Request $request
+     * @internal param Post $modifPost
+     * @internal param Post $post
+     */
+    public function updateAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $post = $em->getRepository('AppBundle:Post')->findOneBy(['id' => $request->get('id')]);
+        if ($request->get('title') != null) {
+            $post->setTitle($request->get('title'));
+        }
+        if ($request->get('content') != null) {
+            $post->setContent($request->get('content'));
+        }
+        $em->merge($post);
         $em->flush();
     }
 
