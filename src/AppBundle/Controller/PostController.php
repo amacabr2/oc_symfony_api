@@ -99,7 +99,6 @@ class PostController extends FOSRestController {
      * @Rest\Put(path="articles/{id}", name="post_update", requirements={"id"="\d+"})
      * @Rest\View(StatusCode=200)
      * @param Request $request
-     * @internal param Post $modifPost
      * @internal param Post $post
      */
     public function updateAction(Request $request) {
