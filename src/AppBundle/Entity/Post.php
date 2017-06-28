@@ -5,12 +5,18 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Post
  *
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
+ *
+ * @Hateoas\Relation("self", href=@Hateoas\Route("post_show", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * @Hateoas\Relation("modify", href=@Hateoas\Route("post_update", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * @Hateoas\Relation("delete", href=@Hateoas\Route("post_remove", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * @Hateoas\Relation("author", embedded=@Hateoas\Embedded("expr(object.getAuthor())"))
  *
  * @Serializer\ExclusionPolicy("all")
  */
