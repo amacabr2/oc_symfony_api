@@ -5,12 +5,20 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Author
  *
  * @ORM\Table(name="authors")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AuthorRepository")
+ *
+ * @Hateoas\Relation("self", href=@Hateoas\Route("author_show", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * Hateoas\Relation("modify", href=@Hateoas\Route("author_update", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * Hateoas\Relation("delete", href=@Hateoas\Route("author_remove", parameters={"id"="expr(object.getId())"}, absolute=true))
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Author
 {
@@ -20,8 +28,7 @@ class Author
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Serializer\Groups({"list"})
+     * @Serializer\Expose
      */
     private $id;
 
@@ -29,8 +36,8 @@ class Author
      * @var string
      *
      * @ORM\Column(name="fullname", type="string", length=100)
-     *
-     * @Serializer\Groups({"list", "detail"})
+     * @Serializer\Expose
+     * @Assert\NotBlank
      */
     private $fullname;
 
@@ -38,8 +45,8 @@ class Author
      * @var string
      *
      * @ORM\Column(name="biography", type="text", nullable=true)
-     *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Expose
+     * @Assert\NotBlank
      */
     private $biography;
 
@@ -47,8 +54,7 @@ class Author
      * @var Post
      *
      * @ORM\OneToMany(targetEntity="Post", mappedBy="author", cascade={"persist"})
-     *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Expose
      */
     private $posts;
 
