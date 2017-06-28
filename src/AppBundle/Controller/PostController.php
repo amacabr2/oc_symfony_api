@@ -44,11 +44,13 @@ class PostController extends FOSRestController {
      * @param ConstraintViolationList $violations
      * @return \FOS\RestBundle\View\View
      */
-    public function createAction(Post $post, ConstraintViolationList $violations) {
+    public function createAction(Post $post, ConstraintViolationList $violations, Request $request) {
         if (count($violations) != 0) {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
         }
         $em = $this->getDoctrine()->getManager();
+        $author = $em->getRepository('AppBundle:Author')->findOneById($request->get('author'));
+        $post->setAuthor($author);
         $em->persist($post);
         $em->flush();
         return $this->view(
@@ -99,7 +101,7 @@ class PostController extends FOSRestController {
      * @Rest\Put(path="articles/{id}", name="post_update", requirements={"id"="\d+"})
      * @Rest\View(StatusCode=200)
      * @param Request $request
-     * @param ConstraintViolationList $violations * @internal param Post $post
+     * @param ConstraintViolationList $violations
      * @return \FOS\RestBundle\View\View
      */
     public function updateAction(Request $request, ConstraintViolationList $violations) {
