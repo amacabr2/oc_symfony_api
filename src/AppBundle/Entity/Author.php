@@ -53,7 +53,7 @@ class Author
     /**
      * @var Post
      *
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="author", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="author", cascade={"remove"})
      * @Serializer\Expose
      */
     private $posts;

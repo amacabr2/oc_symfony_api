@@ -65,6 +65,20 @@ class AuthorController extends FOSRestController {
     }
 
     /**
+     * Supprime un auteur
+     *
+     * @Rest\Delete(path="/auteurs/{id}", name="author_remove", requirements={"id"="\d+"})
+     * @Rest\View(StatusCode=204)
+     * @param Author $author
+     * @internal param Post $post
+     */
+    public function removeAction(Author $author) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($author);
+        $em->flush();
+    }
+
+    /**
      * Modifie l'auteur
      *
      * @Rest\Put(path="auteurs/{id}", name="author_update", requirements={"id"="\d+"})
