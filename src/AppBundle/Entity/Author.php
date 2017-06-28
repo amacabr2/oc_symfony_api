@@ -15,8 +15,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AuthorRepository")
  *
  * @Hateoas\Relation("self", href=@Hateoas\Route("author_show", parameters={"id"="expr(object.getId())"}, absolute=true))
- * Hateoas\Relation("modify", href=@Hateoas\Route("author_update", parameters={"id"="expr(object.getId())"}, absolute=true))
- * Hateoas\Relation("delete", href=@Hateoas\Route("author_remove", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * @Hateoas\Relation("modify", href=@Hateoas\Route("author_update", parameters={"id"="expr(object.getId())"}, absolute=true))
+ * @Hateoas\Relation("delete", href=@Hateoas\Route("author_remove", parameters={"id"="expr(object.getId())"}, absolute=true))
  *
  * @Serializer\ExclusionPolicy("all")
  */
