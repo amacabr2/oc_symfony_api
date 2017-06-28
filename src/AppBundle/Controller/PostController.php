@@ -99,9 +99,13 @@ class PostController extends FOSRestController {
      * @Rest\Put(path="articles/{id}", name="post_update", requirements={"id"="\d+"})
      * @Rest\View(StatusCode=200)
      * @param Request $request
-     * @internal param Post $post
+     * @param ConstraintViolationList $violations * @internal param Post $post
+     * @return \FOS\RestBundle\View\View
      */
-    public function updateAction(Request $request) {
+    public function updateAction(Request $request, ConstraintViolationList $violations) {
+        if (count($violations) != 0) {
+            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+        }
         $em = $this->getDoctrine()->getManager();
         $post = $em->getRepository('AppBundle:Post')->findOneBy(['id' => $request->get('id')]);
         if ($request->get('title') != null) {
