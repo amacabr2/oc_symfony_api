@@ -109,12 +109,16 @@ class PostController extends FOSRestController {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
         }
         $em = $this->getDoctrine()->getManager();
-        $post = $em->getRepository('AppBundle:Post')->findOneBy(['id' => $request->get('id')]);
+        $post = $em->getRepository('AppBundle:Post')->findOneById($request->get('id'));
         if ($request->get('title') != null) {
             $post->setTitle($request->get('title'));
         }
         if ($request->get('content') != null) {
             $post->setContent($request->get('content'));
+        }
+        if ($request->get('author') != null) {
+            $author = $em->getRepository('AppBundle:Author')->findOneById($request->get('author'));
+            $post->setAuthor($author);
         }
         $em->merge($post);
         $em->flush();
