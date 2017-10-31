@@ -42,6 +42,7 @@ class PostController extends FOSRestController {
      * @ParamConverter("post", converter="fos_rest.request_body")
      * @param Post $post
      * @param ConstraintViolationList $violations
+     * @param Request $request
      * @return \FOS\RestBundle\View\View
      */
     public function createAction(Post $post, ConstraintViolationList $violations, Request $request) {
